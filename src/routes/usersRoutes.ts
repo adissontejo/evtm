@@ -1,11 +1,12 @@
 import { Router } from 'express';
 
-import usersValidators from '~/validators/usersValidators';
+import { UsersController } from '~/controllers';
+import { usersValidators } from '~/validators';
 
 const usersRouter = Router();
 
-usersRouter.post('/', usersValidators.create, (req, res) =>
-  res.status(201).json('OK')
-);
+const usersController = new UsersController();
+
+usersRouter.post('/', usersValidators.create, usersController.create);
 
 export default usersRouter;
