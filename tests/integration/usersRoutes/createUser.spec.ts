@@ -1,6 +1,11 @@
 import api from '../api';
+import getConnection from '../database';
 
 describe('POST /users', () => {
+  beforeAll(async () => {
+    const connection = await getConnection();
+  });
+
   it('should return status code 201 when params are valid', async () => {
     const user = {
       name: 'User Name',
