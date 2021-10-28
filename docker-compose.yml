@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:13.4-alpine
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB:-evtm}
+    ports:
+      - ${DB_PORT:-5432}:5432
