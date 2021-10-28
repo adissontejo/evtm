@@ -1228,6 +1228,11 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
+"@trapi/query@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@trapi/query/-/query-2.0.1.tgz#0807c6ee7251d2b9744d37dd8c94bd757e9b0aa0"
+  integrity sha512-hP6Dj2boFPmpGOZGMBu1qRYxhW7OfnfKHW9A0fhWp9nCHb2tsVIOaX2nJuKOc5ZEx+G6Wo/B3idSpSGSfaSg2w==
+
 "@types/babel__core@^7.0.0", "@types/babel__core@^7.1.14":
   version "7.1.16"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.16.tgz#bc12c74b7d65e82d29876b5d0baf5c625ac58702"
@@ -5127,6 +5132,17 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
+typeorm-extension@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/typeorm-extension/-/typeorm-extension-1.0.1.tgz#e6bdc8cca6068e1714bfe22e6e3b4f41f4c9d004"
+  integrity sha512-PCRsPXpAa4kv8KfvRvl/EiE92XjAJtGZBYOlsG1UDDH1rvJ7W288lGQYkVAbHRW59AP3gkDsQInouCkiL5oc/w==
+  dependencies:
+    "@trapi/query" "^2.0.1"
+    glob "^7.1.7"
+    typeorm "^0.2.38"
+    typescript "^4.4.3"
+    yargs "^17.0.1"
+
 typeorm@^0.2.38:
   version "0.2.38"
   resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.38.tgz#2af08079919f6ab04cd17017f9faa2c8d5cd566f"
@@ -5150,7 +5166,7 @@ typeorm@^0.2.38:
     yargs "^17.0.1"
     zen-observable-ts "^1.0.0"
 
-typescript@^4.4.4:
+typescript@^4.4.3, typescript@^4.4.4:
   version "4.4.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.4.tgz#2cd01a1a1f160704d3101fd5a58ff0f9fcb8030c"
   integrity sha512-DqGhF5IKoBl8WNf8C1gu8q0xZSInh9j1kJJMqT3a94w1JzVaBU4EXOSMrz9yDqMT0xt3selp83fuFMQ0uzv6qA==

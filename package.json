@@ -11,7 +11,8 @@
     "joi": "^17.4.2",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.38"
+    "typeorm": "^0.2.38",
+    "typeorm-extension": "^1.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
@@ -44,16 +45,9 @@
   },
   "scripts": {
     "dev": "ts-node-dev --inspect -r tsconfig-paths/register src/server.ts",
-    "test": "jest",
+    "test": "jest --forceExit",
     "build": "babel src --extensions \".ts,.js\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "node dist/server.js",
     "db": "ts-node-dev ./node_modules/typeorm/cli.js"
-  },
-  "jest": {
-    "clearMocks": true,
-    "preset": "ts-jest",
-    "moduleNameMapper": {
-      "^~/(.*)": "<rootDir>/src/$1"
-    }
   }
 }

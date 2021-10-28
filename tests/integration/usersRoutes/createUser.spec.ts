@@ -1,28 +1,31 @@
 import api from '../api';
-import getConnection from '../database';
+import db from '../db';
+
+const defaultUser = {
+  name: 'User Name',
+  email: 'user@email.com',
+  password: 'userpassword',
+};
 
 describe('POST /users', () => {
   beforeAll(async () => {
-    const connection = await getConnection();
+    await db.init();
+  });
+
+  afterAll(async () => {
+    await db.clear();
   });
 
   it('should return status code 201 when params are valid', async () => {
-    const user = {
-      name: 'User Name',
-      email: 'user@email.com',
-      password: 'userpassword',
-    };
-
-    const result = await api.post('/users').send({ user });
+    const result = await api.post('/users').send({ user: defaultUser });
 
     expect(result.statusCode).toBe(201);
   });
 
   it('should return status code 400 when params are missing', async () => {
-    const user = {
-      name: 'User Name',
-      email: 'user@email.com',
-    };
+    const user = { ...defaultUser };
+
+    delete user.password;
 
     const result = await api.post('/users').send({ user });
 
@@ -30,26 +33,30 @@ describe('POST /users', () => {
   });
 
   it('should return status code 400 when email is invalid', async () => {
-    const user = {
-      name: 'User Name',
-      email: 'invalidemail@',
-      password: 'userpassword',
-    };
-
-    const result = await api.post('/users').send({ user });
+    const result = await api.post('/users').send({
+      user: {
+        ...defaultUser,
+        email: 'invalidemail@',
+      },
+    });
 
     expect(result.statusCode).toBe(400);
   });
 
   it('should return status code 400 when password is too short', async () => {
-    const user = {
-      name: 'User Name',
-      email: 'user@email.com',
-      password: 'short',
-    };
-
-    const result = await api.post('/users').send({ user });
+    const result = await api.post('/users').send({
+      user: {
+        ...defaultUser,
+        password: 'short',
+      },
+    });
 
     expect(result.statusCode).toBe(400);
+  });
+
+  it('should return status code 409 when email has already been used', async () => {
+    const result = await api.post('/users').send({ user: defaultUser });
+
+    expect(result.statusCode).toBe(409);
   });
 });
