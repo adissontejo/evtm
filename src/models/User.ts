@@ -17,6 +17,9 @@ class User {
   @Column()
   email: string;
 
+  @Column({ select: false })
+  password: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
