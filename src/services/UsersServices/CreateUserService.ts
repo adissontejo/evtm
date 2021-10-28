@@ -1,4 +1,5 @@
 import { hash } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 
 import BaseService from '../BaseService';
 
@@ -28,7 +29,12 @@ class CreateUserService extends BaseService {
       password: encryptedPassword,
     });
 
-    return { user };
+    const token = sign({ email: user.email }, process.env.JWT_SECRET, {
+      subject: user.id,
+      expiresIn: '1d',
+    });
+
+    return { user, token };
   }
 }
 

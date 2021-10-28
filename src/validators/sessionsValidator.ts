@@ -2,11 +2,10 @@ import Joi from 'joi';
 
 import validator from './validator';
 
-const usersValidators = {
+const sessionsValidator = {
   create: validator({
     body: Joi.object().keys({
       user: Joi.object().keys({
-        name: Joi.string().required(),
         email: Joi.string().email().required(),
         password: Joi.string().min(8).required(),
       }),
@@ -14,4 +13,4 @@ const usersValidators = {
   }),
 };
 
-export default usersValidators;
+export default sessionsValidator;
