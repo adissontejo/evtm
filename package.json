@@ -47,7 +47,7 @@
   },
   "scripts": {
     "dev": "ts-node-dev --inspect -r tsconfig-paths/register src/server.ts",
-    "test": "jest --forceExit --runInBand",
+    "test": "jest --verbose --runInBand",
     "build": "babel src --extensions \".ts,.js\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "node dist/server.js",
     "db": "ts-node-dev ./node_modules/typeorm/cli.js"

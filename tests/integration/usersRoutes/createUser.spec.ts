@@ -16,47 +16,57 @@ describe('POST /users', () => {
     await db.clear();
   });
 
-  it('should return status code 201 when params are valid', async () => {
-    const result = await api.post('/users').send({ user: defaultBody });
+  describe('when params are valid', () => {
+    it('returns 201', async () => {
+      const result = await api.post('/users').send({ user: defaultBody });
 
-    expect(result.statusCode).toBe(201);
-  });
-
-  it('should return status code 400 when params are missing', async () => {
-    const user = { ...defaultBody };
-
-    delete user.password;
-
-    const result = await api.post('/users').send({ user });
-
-    expect(result.statusCode).toBe(400);
-  });
-
-  it('should return status code 400 when email is invalid', async () => {
-    const result = await api.post('/users').send({
-      user: {
-        ...defaultBody,
-        email: 'invalidemail@',
-      },
+      expect(result.statusCode).toBe(201);
     });
-
-    expect(result.statusCode).toBe(400);
   });
 
-  it('should return status code 400 when password is too short', async () => {
-    const result = await api.post('/users').send({
-      user: {
-        ...defaultBody,
-        password: 'short',
-      },
+  describe('when params are missing', () => {
+    it('returns 400', async () => {
+      const user = { ...defaultBody };
+
+      delete user.password;
+
+      const result = await api.post('/users').send({ user });
+
+      expect(result.statusCode).toBe(400);
     });
-
-    expect(result.statusCode).toBe(400);
   });
 
-  it('should return status code 409 when email has already been used', async () => {
-    const result = await api.post('/users').send({ user: defaultBody });
+  describe('when email is invalid', () => {
+    it('returns 400', async () => {
+      const result = await api.post('/users').send({
+        user: {
+          ...defaultBody,
+          email: 'invalidemail@',
+        },
+      });
 
-    expect(result.statusCode).toBe(409);
+      expect(result.statusCode).toBe(400);
+    });
+  });
+
+  describe('when password is too short', () => {
+    it('returns 400', async () => {
+      const result = await api.post('/users').send({
+        user: {
+          ...defaultBody,
+          password: 'short',
+        },
+      });
+
+      expect(result.statusCode).toBe(400);
+    });
+  });
+
+  describe('when email has already been used', () => {
+    it('returns 409', async () => {
+      const result = await api.post('/users').send({ user: defaultBody });
+
+      expect(result.statusCode).toBe(409);
+    });
   });
 });

@@ -22,63 +22,75 @@ describe('POST /sessions', () => {
     await db.clear();
   });
 
-  it('should return status code 201 when params are valid', async () => {
-    const result = await api.post('/sessions').send({ user: defaultBody });
+  describe('when params are valid', () => {
+    it('returns 201', async () => {
+      const result = await api.post('/sessions').send({ user: defaultBody });
 
-    expect(result.statusCode).toBe(201);
-  });
-
-  it('should return status code 400 when params are missing', async () => {
-    const user = { ...defaultBody };
-
-    delete user.email;
-
-    const result = await api.post('/sessions').send({ user });
-
-    expect(result.statusCode).toBe(400);
-  });
-
-  it('should return status code 400 when email is invalid', async () => {
-    const result = await api.post('/sessions').send({
-      user: {
-        ...defaultBody,
-        email: 'invalidemail@',
-      },
+      expect(result.statusCode).toBe(201);
     });
-
-    expect(result.statusCode).toBe(400);
   });
 
-  it('should return status code 400 when password is too short', async () => {
-    const result = await api.post('/sessions').send({
-      user: {
-        ...defaultBody,
-        password: 'short',
-      },
-    });
+  describe('when params are missing', () => {
+    it('returns 400', async () => {
+      const user = { ...defaultBody };
 
-    expect(result.statusCode).toBe(400);
+      delete user.email;
+
+      const result = await api.post('/sessions').send({ user });
+
+      expect(result.statusCode).toBe(400);
+    });
   });
 
-  it('should return status code 401 when user does not exist', async () => {
-    const result = await api.post('/sessions').send({
-      user: {
-        ...defaultBody,
-        email: 'inexistinguser@email.com',
-      },
-    });
+  describe('when email is invalid', () => {
+    it('returns 400', async () => {
+      const result = await api.post('/sessions').send({
+        user: {
+          ...defaultBody,
+          email: 'invalidemail@',
+        },
+      });
 
-    expect(result.statusCode).toBe(401);
+      expect(result.statusCode).toBe(400);
+    });
   });
 
-  it('should return status code 401 when password is wrong', async () => {
-    const result = await api.post('/sessions').send({
-      user: {
-        ...defaultBody,
-        password: 'wrongpassword',
-      },
-    });
+  describe('when password is too short', () => {
+    it('returns 400', async () => {
+      const result = await api.post('/sessions').send({
+        user: {
+          ...defaultBody,
+          password: 'short',
+        },
+      });
 
-    expect(result.statusCode).toBe(401);
+      expect(result.statusCode).toBe(400);
+    });
+  });
+
+  describe('when user does not exist', () => {
+    it('returns 401', async () => {
+      const result = await api.post('/sessions').send({
+        user: {
+          ...defaultBody,
+          email: 'inexistinguser@email.com',
+        },
+      });
+
+      expect(result.statusCode).toBe(401);
+    });
+  });
+
+  describe('when password is wrong', () => {
+    it('returns 401', async () => {
+      const result = await api.post('/sessions').send({
+        user: {
+          ...defaultBody,
+          password: 'wrongpassword',
+        },
+      });
+
+      expect(result.statusCode).toBe(401);
+    });
   });
 });
