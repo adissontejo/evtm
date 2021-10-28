@@ -1,7 +1,7 @@
 import api from '../api';
 import db from '../db';
 
-const defaultUser = {
+const defaultBody = {
   name: 'User Name',
   email: 'user@email.com',
   password: 'userpassword',
@@ -17,13 +17,13 @@ describe('POST /users', () => {
   });
 
   it('should return status code 201 when params are valid', async () => {
-    const result = await api.post('/users').send({ user: defaultUser });
+    const result = await api.post('/users').send({ user: defaultBody });
 
     expect(result.statusCode).toBe(201);
   });
 
   it('should return status code 400 when params are missing', async () => {
-    const user = { ...defaultUser };
+    const user = { ...defaultBody };
 
     delete user.password;
 
@@ -35,7 +35,7 @@ describe('POST /users', () => {
   it('should return status code 400 when email is invalid', async () => {
     const result = await api.post('/users').send({
       user: {
-        ...defaultUser,
+        ...defaultBody,
         email: 'invalidemail@',
       },
     });
@@ -46,7 +46,7 @@ describe('POST /users', () => {
   it('should return status code 400 when password is too short', async () => {
     const result = await api.post('/users').send({
       user: {
-        ...defaultUser,
+        ...defaultBody,
         password: 'short',
       },
     });
@@ -55,7 +55,7 @@ describe('POST /users', () => {
   });
 
   it('should return status code 409 when email has already been used', async () => {
-    const result = await api.post('/users').send({ user: defaultUser });
+    const result = await api.post('/users').send({ user: defaultBody });
 
     expect(result.statusCode).toBe(409);
   });
