@@ -6,6 +6,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "joi": "^17.4.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
