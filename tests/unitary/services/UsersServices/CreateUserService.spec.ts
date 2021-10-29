@@ -3,11 +3,7 @@ import { mocked } from 'ts-jest/utils';
 
 import { CreateUserService } from '~/services';
 
-jest.mock('typeorm', () => ({
-  __esModule: true,
-  ...(jest.requireActual('typeorm') as Object),
-  getCustomRepository: jest.fn(),
-}));
+jest.mock('typeorm');
 
 const user = {
   name: 'User Name',

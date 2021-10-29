@@ -1,5 +1,7 @@
 import { api, db } from '@tests/utils';
 
+jest.unmock('typeorm');
+
 const user = {
   name: 'User Name',
   email: 'user@email.com',

@@ -4,11 +4,7 @@ import { hashSync } from 'bcryptjs';
 
 import { CreateSessionService } from '~/services';
 
-jest.mock('typeorm', () => ({
-  __esModule: true,
-  ...(jest.requireActual('typeorm') as Object),
-  getCustomRepository: jest.fn(),
-}));
+jest.mock('typeorm');
 
 const user = {
   email: 'user@email.com',

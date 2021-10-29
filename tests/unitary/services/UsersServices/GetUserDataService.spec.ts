@@ -3,11 +3,7 @@ import { mocked } from 'ts-jest/utils';
 
 import { GetUserDataService } from '~/services';
 
-jest.mock('typeorm', () => ({
-  __esModule: true,
-  ...(jest.requireActual('typeorm') as Object),
-  getCustomRepository: jest.fn(),
-}));
+jest.mock('typeorm');
 
 const session = {
   userId: 'userid',
@@ -17,7 +13,7 @@ const usersRepo = {
   findOne: jest.fn(),
 };
 
-describe('Service GetUserData', () => {
+describe('Class GetUserDataService', () => {
   beforeAll(() => {
     mocked(getCustomRepository).mockReturnValue(usersRepo);
   });
