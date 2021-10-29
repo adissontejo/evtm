@@ -1,6 +1,6 @@
-import { usersValidators } from '~/validators';
+import { mockRequestParams } from '@tests/utils';
 
-import { mockRequestParams } from '../../helpers';
+import { usersValidators } from '~/validators';
 
 const { req, res, next, reset } = mockRequestParams();
 

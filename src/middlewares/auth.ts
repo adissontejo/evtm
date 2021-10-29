@@ -1,28 +1,26 @@
-import { RequestHandler } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 
-const auth: RequestHandler = (req, res, next) => {
+const auth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization;
 
   if (!token) {
     return res.status(401).json({ error: 'Invalid token.' });
   }
 
-  const [, jwt] = token.split(' ');
+  const jwt = token.replace('Bearer ', '');
 
-  verify(jwt, process.env.JWT_SECRET || 'privatekey', (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ error: 'Invalid token.' });
-    }
+  try {
+    const { sub } = verify(jwt, process.env.JWT_SECRET || 'privatekey');
 
     res.locals.session = {
-      userId: decoded.sub,
+      userId: sub,
     };
 
     return next();
-  });
-
-  return null;
+  } catch (e) {
+    return res.status(401).json({ error: 'Invalid token.' });
+  }
 };
 
 export default auth;

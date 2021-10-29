@@ -1,7 +1,7 @@
+import { mockRequestParams } from '@tests/utils';
+
 import { UsersController } from '~/controllers';
 import { CreateUserService, GetUserDataService } from '~/services';
-
-import { mockRequestParams } from '../helpers';
 
 jest.mock('~/services');
 

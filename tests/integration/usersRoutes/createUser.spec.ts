@@ -1,5 +1,4 @@
-import api from '../api';
-import db from '../db';
+import { api, db } from '@tests/utils';
 
 const user = {
   name: 'User Name',

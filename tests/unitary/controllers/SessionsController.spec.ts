@@ -1,7 +1,7 @@
+import { mockRequestParams } from '@tests/utils';
+
 import { SessionsController } from '~/controllers';
 import { CreateSessionService } from '~/services';
-
-import { mockRequestParams } from '../helpers';
 
 jest.mock('~/services');
 

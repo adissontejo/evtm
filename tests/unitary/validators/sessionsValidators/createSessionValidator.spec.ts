@@ -1,6 +1,6 @@
-import { sessionsValidator } from '~/validators';
+import { mockRequestParams } from '@tests/utils';
 
-import { mockRequestParams } from '../../helpers';
+import { sessionsValidator } from '~/validators';
 
 const { req, res, next, reset } = mockRequestParams();
 

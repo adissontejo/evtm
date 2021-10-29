@@ -1,6 +1,6 @@
-import { errors } from '~/middlewares';
+import { mockRequestParams } from '@tests/utils';
 
-import { mockRequestParams } from '../helpers';
+import { errors } from '~/middlewares';
 
 const { req, res, next, reset } = mockRequestParams();
 
