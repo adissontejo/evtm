@@ -6,14 +6,21 @@ import { mockRequestParams } from '../helpers';
 
 const { req, res, next, reset } = mockRequestParams();
 
-const token = sign({ email: 'payloademail' }, 'privatekey', {
-  subject: 'userid',
-  expiresIn: '1d',
-});
+const session = {
+  token: sign({ email: 'payloademail' }, 'privatekey', {
+    subject: 'userid',
+    expiresIn: '1d',
+  }),
+};
 
 describe('Middleware auth', () => {
   beforeEach(() => {
     reset();
+
+    session.token = sign({ email: 'payloademail' }, 'privatekey', {
+      subject: 'userid',
+      expiresIn: '1d',
+    });
   });
 
   describe('when token is missing', () => {
@@ -36,7 +43,7 @@ describe('Middleware auth', () => {
 
   describe('when token is valid', () => {
     it('forwards session', () => {
-      req.headers.authorization = `Bearer ${token}`;
+      req.headers.authorization = `Bearer ${session.token}`;
 
       auth(req, res, next);
 

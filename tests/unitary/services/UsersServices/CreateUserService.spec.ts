@@ -9,18 +9,18 @@ jest.mock('typeorm', () => ({
   getCustomRepository: jest.fn(),
 }));
 
-const userData = {
+const user = {
   name: 'User Name',
   email: 'user@email.com',
   password: 'userpassword',
 };
 
 const userReturnedData = {
+  ...user,
   id: 'userid',
-  name: 'User Name',
-  email: 'user@email.com',
-  created_at: new Date(),
-  updated_at: new Date(),
+  password: 'userhashedpassword',
+  createdAt: new Date(),
+  updatedAat: new Date(),
 };
 
 const usersRepo = {
@@ -34,6 +34,10 @@ describe('Class CreateUserService', () => {
   });
 
   beforeEach(() => {
+    user.name = 'User Name';
+    user.email = 'user@email.com';
+    user.password = 'userpassword';
+
     mocked(usersRepo.findOne).mockReturnValue(userReturnedData);
     mocked(usersRepo.save).mockReturnValue(userReturnedData);
   });
@@ -42,7 +46,7 @@ describe('Class CreateUserService', () => {
     it('does not save user and returns error message', async () => {
       const service = new CreateUserService();
 
-      const result = await service.execute(userData);
+      const result = await service.execute(user);
 
       expect(usersRepo.save).not.toBeCalled();
       expect(result).toHaveProperty('error');
@@ -55,7 +59,7 @@ describe('Class CreateUserService', () => {
 
       const service = new CreateUserService();
 
-      const result = await service.execute(userData);
+      const result = await service.execute(user);
 
       expect(usersRepo.save).toBeCalled();
       expect(result).toHaveProperty('user');

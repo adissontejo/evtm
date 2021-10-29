@@ -1,7 +1,7 @@
 import api from '../api';
 import db from '../db';
 
-const userData = {
+const user = {
   email: 'user@email.com',
   password: 'userpassword',
 };
@@ -12,10 +12,15 @@ describe('POST /sessions', () => {
 
     await api.post('/users').send({
       user: {
-        ...userData,
+        ...user,
         name: 'User Name',
       },
     });
+  });
+
+  beforeEach(() => {
+    user.email = 'user@email.com';
+    user.password = 'userpassword';
   });
 
   afterAll(async () => {
@@ -24,8 +29,6 @@ describe('POST /sessions', () => {
 
   describe('when params are missing', () => {
     it('returns 400', async () => {
-      const user = { ...userData };
-
       delete user.email;
 
       const result = await api.post('/sessions').send({ user });
@@ -36,12 +39,9 @@ describe('POST /sessions', () => {
 
   describe('when email is invalid', () => {
     it('returns 400', async () => {
-      const result = await api.post('/sessions').send({
-        user: {
-          ...userData,
-          email: 'invalidemail@',
-        },
-      });
+      user.email = 'invalidemail@';
+
+      const result = await api.post('/sessions').send({ user });
 
       expect(result.statusCode).toBe(400);
     });
@@ -49,12 +49,9 @@ describe('POST /sessions', () => {
 
   describe('when password is too short', () => {
     it('returns 400', async () => {
-      const result = await api.post('/sessions').send({
-        user: {
-          ...userData,
-          password: 'short',
-        },
-      });
+      user.password = 'shortp';
+
+      const result = await api.post('/sessions').send({ user });
 
       expect(result.statusCode).toBe(400);
     });
@@ -62,12 +59,9 @@ describe('POST /sessions', () => {
 
   describe('when user does not exist', () => {
     it('returns 401', async () => {
-      const result = await api.post('/sessions').send({
-        user: {
-          ...userData,
-          email: 'inexistinguser@email.com',
-        },
-      });
+      user.email = 'inexistinguser@email.com';
+
+      const result = await api.post('/sessions').send({ user });
 
       expect(result.statusCode).toBe(401);
     });
@@ -75,12 +69,9 @@ describe('POST /sessions', () => {
 
   describe('when password does not match', () => {
     it('returns 401', async () => {
-      const result = await api.post('/sessions').send({
-        user: {
-          ...userData,
-          password: 'wrongpassword',
-        },
-      });
+      user.password = 'wrongpassword';
+
+      const result = await api.post('/sessions').send({ user });
 
       expect(result.statusCode).toBe(401);
     });
@@ -88,7 +79,7 @@ describe('POST /sessions', () => {
 
   describe('when params are valid', () => {
     it('returns 201', async () => {
-      const result = await api.post('/sessions').send({ user: userData });
+      const result = await api.post('/sessions').send({ user });
 
       expect(result.statusCode).toBe(201);
     });

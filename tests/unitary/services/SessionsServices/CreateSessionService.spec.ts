@@ -10,14 +10,9 @@ jest.mock('typeorm', () => ({
   getCustomRepository: jest.fn(),
 }));
 
-const userData = {
+const user = {
   email: 'user@email.com',
   password: 'userpassword',
-};
-
-const userReturnedData = {
-  id: 'userid',
-  password: hashSync('userpassword', 8),
 };
 
 const usersRepo = {
@@ -30,7 +25,17 @@ describe('Class CreateSessionService', () => {
   });
 
   beforeEach(() => {
-    mocked(usersRepo).findOne.mockReturnValue(userReturnedData);
+    user.email = 'user@email.com';
+    user.password = 'userpassword';
+
+    mocked(usersRepo).findOne.mockReturnValue({
+      id: 'userid',
+      name: 'User Name',
+      email: user.email,
+      password: hashSync('userpassword', 8),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
   });
 
   describe('when user is not found', () => {
@@ -39,7 +44,7 @@ describe('Class CreateSessionService', () => {
 
       const service = new CreateSessionService();
 
-      const result = await service.execute(userData);
+      const result = await service.execute(user);
 
       expect(result).toHaveProperty('error');
     });
@@ -49,10 +54,9 @@ describe('Class CreateSessionService', () => {
     it('returns error message', async () => {
       const service = new CreateSessionService();
 
-      const result = await service.execute({
-        ...userData,
-        password: 'wrongpassword',
-      });
+      user.password = 'wrongpassword';
+
+      const result = await service.execute(user);
 
       expect(result).toHaveProperty('error');
     });
@@ -62,7 +66,7 @@ describe('Class CreateSessionService', () => {
     it('returns token', async () => {
       const service = new CreateSessionService();
 
-      const result = await service.execute(userData);
+      const result = await service.execute(user);
 
       expect(result).toHaveProperty('token');
     });
