@@ -29,10 +29,14 @@ class CreateUserService extends BaseService {
       password: encryptedPassword,
     });
 
-    const token = sign({ email: user.email }, process.env.JWT_SECRET, {
-      subject: user.id,
-      expiresIn: '1d',
-    });
+    const token = sign(
+      { email: user.email },
+      process.env.JWT_SECRET || 'defaultkey',
+      {
+        subject: user.id,
+        expiresIn: '1d',
+      }
+    );
 
     return { user, token };
   }

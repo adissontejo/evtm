@@ -8,7 +8,7 @@ const auth: RequestHandler = (req, res, next) => {
     return res.status(401).json({ error: 'Invalid token.' });
   }
 
-  verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  verify(token, process.env.JWT_SECRET || 'defaultkey', (err, decoded) => {
     if (err) {
       return res.status(401).json({ error: 'Invalid token.' });
     }

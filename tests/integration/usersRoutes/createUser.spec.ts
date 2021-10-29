@@ -1,7 +1,7 @@
 import api from '../api';
 import db from '../db';
 
-const defaultBody = {
+const userData = {
   name: 'User Name',
   email: 'user@email.com',
   password: 'userpassword',
@@ -16,17 +16,9 @@ describe('POST /users', () => {
     await db.clear();
   });
 
-  describe('when params are valid', () => {
-    it('returns 201', async () => {
-      const result = await api.post('/users').send({ user: defaultBody });
-
-      expect(result.statusCode).toBe(201);
-    });
-  });
-
   describe('when params are missing', () => {
     it('returns 400', async () => {
-      const user = { ...defaultBody };
+      const user = { ...userData };
 
       delete user.password;
 
@@ -40,7 +32,7 @@ describe('POST /users', () => {
     it('returns 400', async () => {
       const result = await api.post('/users').send({
         user: {
-          ...defaultBody,
+          ...userData,
           email: 'invalidemail@',
         },
       });
@@ -53,7 +45,7 @@ describe('POST /users', () => {
     it('returns 400', async () => {
       const result = await api.post('/users').send({
         user: {
-          ...defaultBody,
+          ...userData,
           password: 'short',
         },
       });
@@ -62,9 +54,17 @@ describe('POST /users', () => {
     });
   });
 
+  describe('when params are valid', () => {
+    it('returns 201', async () => {
+      const result = await api.post('/users').send({ user: userData });
+
+      expect(result.statusCode).toBe(201);
+    });
+  });
+
   describe('when email has already been used', () => {
     it('returns 409', async () => {
-      const result = await api.post('/users').send({ user: defaultBody });
+      const result = await api.post('/users').send({ user: userData });
 
       expect(result.statusCode).toBe(409);
     });

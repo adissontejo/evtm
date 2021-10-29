@@ -33,10 +33,14 @@ class CreateSessionService extends BaseService {
       };
     }
 
-    const token = sign({ email: userData.email }, process.env.JWT_SECRET, {
-      subject: user.id,
-      expiresIn: '1d',
-    });
+    const token = sign(
+      { email: userData.email },
+      process.env.JWT_SECRET || 'defaultkey',
+      {
+        subject: user.id,
+        expiresIn: '1d',
+      }
+    );
 
     return { user, token };
   }

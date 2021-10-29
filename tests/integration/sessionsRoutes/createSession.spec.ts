@@ -1,7 +1,7 @@
 import api from '../api';
 import db from '../db';
 
-const defaultBody = {
+const userData = {
   email: 'user@email.com',
   password: 'userpassword',
 };
@@ -12,7 +12,7 @@ describe('POST /sessions', () => {
 
     await api.post('/users').send({
       user: {
-        ...defaultBody,
+        ...userData,
         name: 'User Name',
       },
     });
@@ -22,17 +22,9 @@ describe('POST /sessions', () => {
     await db.clear();
   });
 
-  describe('when params are valid', () => {
-    it('returns 201', async () => {
-      const result = await api.post('/sessions').send({ user: defaultBody });
-
-      expect(result.statusCode).toBe(201);
-    });
-  });
-
   describe('when params are missing', () => {
     it('returns 400', async () => {
-      const user = { ...defaultBody };
+      const user = { ...userData };
 
       delete user.email;
 
@@ -46,7 +38,7 @@ describe('POST /sessions', () => {
     it('returns 400', async () => {
       const result = await api.post('/sessions').send({
         user: {
-          ...defaultBody,
+          ...userData,
           email: 'invalidemail@',
         },
       });
@@ -59,7 +51,7 @@ describe('POST /sessions', () => {
     it('returns 400', async () => {
       const result = await api.post('/sessions').send({
         user: {
-          ...defaultBody,
+          ...userData,
           password: 'short',
         },
       });
@@ -72,7 +64,7 @@ describe('POST /sessions', () => {
     it('returns 401', async () => {
       const result = await api.post('/sessions').send({
         user: {
-          ...defaultBody,
+          ...userData,
           email: 'inexistinguser@email.com',
         },
       });
@@ -81,16 +73,24 @@ describe('POST /sessions', () => {
     });
   });
 
-  describe('when password is wrong', () => {
+  describe('when password does not match', () => {
     it('returns 401', async () => {
       const result = await api.post('/sessions').send({
         user: {
-          ...defaultBody,
+          ...userData,
           password: 'wrongpassword',
         },
       });
 
       expect(result.statusCode).toBe(401);
+    });
+  });
+
+  describe('when params are valid', () => {
+    it('returns 201', async () => {
+      const result = await api.post('/sessions').send({ user: userData });
+
+      expect(result.statusCode).toBe(201);
     });
   });
 });
