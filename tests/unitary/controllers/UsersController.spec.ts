@@ -1,5 +1,5 @@
 import { UsersController } from '~/controllers';
-import { CreateUserService } from '~/services';
+import { CreateUserService, GetUserDataService } from '~/services';
 
 import { mockRequestParams } from '../helpers';
 
@@ -27,6 +27,20 @@ describe('Class UsersController', () => {
       await controller.create(req, res);
 
       expect(service).toBeCalledWith(req.body.user);
+    });
+  });
+
+  describe('method getData', () => {
+    it('calls GetUserDataService', async () => {
+      const service = GetUserDataService.prototype.execute;
+
+      res.locals.session = {
+        userId: 'userid',
+      };
+
+      await controller.getData(req, res);
+
+      expect(service).toBeCalledWith(res.locals.session);
     });
   });
 });

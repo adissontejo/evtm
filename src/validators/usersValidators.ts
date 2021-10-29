@@ -12,6 +12,8 @@ const usersValidators = {
       }),
     }),
   }),
+
+  getData: validator({}),
 };
 
 export default usersValidators;
