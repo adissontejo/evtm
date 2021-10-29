@@ -7,10 +7,7 @@ import { mockRequestParams } from '../helpers';
 const { req, res, next, reset } = mockRequestParams();
 
 const session = {
-  token: sign({ email: 'payloademail' }, 'privatekey', {
-    subject: 'userid',
-    expiresIn: '1d',
-  }),
+  token: '',
 };
 
 describe('Middleware auth', () => {
