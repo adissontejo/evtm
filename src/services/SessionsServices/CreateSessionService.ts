@@ -14,7 +14,6 @@ class CreateSessionService extends BaseService {
       where: {
         email: userData.email,
       },
-      select: ['password', 'id'],
     });
 
     if (!user) {
@@ -41,6 +40,8 @@ class CreateSessionService extends BaseService {
         expiresIn: '1d',
       }
     );
+
+    delete user.password;
 
     return { user, token };
   }

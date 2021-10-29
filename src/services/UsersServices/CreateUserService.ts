@@ -38,6 +38,8 @@ class CreateUserService extends BaseService {
       }
     );
 
+    delete user.password;
+
     return { user, token };
   }
 }
