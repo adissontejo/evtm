@@ -34,7 +34,7 @@ class CreateSessionService extends BaseService {
 
     const token = sign(
       { email: userData.email },
-      process.env.JWT_SECRET || 'defaultkey',
+      process.env.JWT_SECRET || 'privatekey',
       {
         subject: user.id,
         expiresIn: '1d',
