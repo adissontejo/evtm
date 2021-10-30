@@ -4,6 +4,8 @@ jest.unmock('typeorm');
 
 let body = mockConsts.createUserBody();
 
+const request = () => api.post('/users').send(body);
+
 describe('POST /users', () => {
   beforeAll(async () => {
     await db.init();
@@ -21,7 +23,7 @@ describe('POST /users', () => {
     it('returns 400', async () => {
       delete body.user.password;
 
-      const result = await api.post('/users').send(body);
+      const result = await request();
 
       expect(result.statusCode).toBe(400);
     });
@@ -31,7 +33,7 @@ describe('POST /users', () => {
     it('returns 400', async () => {
       body.user.email = 'invalidemail@';
 
-      const result = await api.post('/users').send(body);
+      const result = await request();
 
       expect(result.statusCode).toBe(400);
     });
@@ -41,7 +43,7 @@ describe('POST /users', () => {
     it('returns 400', async () => {
       body.user.password = 'shortp';
 
-      const result = await api.post('/users').send(body);
+      const result = await request();
 
       expect(result.statusCode).toBe(400);
     });
@@ -49,7 +51,7 @@ describe('POST /users', () => {
 
   describe('when params are valid', () => {
     it('returns 201', async () => {
-      const result = await api.post('/users').send(body);
+      const result = await request();
 
       expect(result.statusCode).toBe(201);
     });
@@ -57,7 +59,7 @@ describe('POST /users', () => {
 
   describe('when email has already been used', () => {
     it('returns 409', async () => {
-      const result = await api.post('/users').send(body);
+      const result = await request();
 
       expect(result.statusCode).toBe(409);
     });

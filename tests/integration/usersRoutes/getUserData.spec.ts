@@ -4,6 +4,14 @@ jest.unmock('typeorm');
 
 let token = '';
 
+const request = (authorization?: string) => {
+  if (!authorization) {
+    return api.get('/users');
+  }
+
+  return api.get('/users').set('Authorization', authorization);
+};
+
 describe('GET /users', () => {
   beforeAll(async () => {
     await db.init();
@@ -19,7 +27,7 @@ describe('GET /users', () => {
 
   describe('when token is missing', () => {
     it('returns 401', async () => {
-      const result = await api.get('/users');
+      const result = await request();
 
       expect(result.statusCode).toBe(401);
     });
@@ -27,9 +35,7 @@ describe('GET /users', () => {
 
   describe('when token is invalid', () => {
     it('returns 401', async () => {
-      const result = await api
-        .get('/users')
-        .set('Authorization', 'invalidtoken');
+      const result = await request('invalidtoken');
 
       expect(result.statusCode).toBe(401);
     });
@@ -37,7 +43,7 @@ describe('GET /users', () => {
 
   describe('when token is valid', () => {
     it('returns 200', async () => {
-      const result = await api.get('/users').set('Authorization', token);
+      const result = await request(token);
 
       expect(result.statusCode).toBe(200);
     });
