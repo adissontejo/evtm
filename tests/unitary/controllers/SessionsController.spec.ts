@@ -1,4 +1,4 @@
-import { mockRequestParams } from '@tests/utils';
+import { mockRequestParams, mockConsts } from '@tests/utils';
 
 import { SessionsController } from '~/controllers';
 import { CreateSessionService } from '~/services';
@@ -18,10 +18,7 @@ describe('Class SessionsController', () => {
     it('calls CreateSessionService', async () => {
       const service = CreateSessionService.prototype.execute;
 
-      req.body.user = {
-        email: 'user@email.com',
-        password: 'userpassword',
-      };
+      req.body = mockConsts.createSessionBody();
 
       await controller.create(req, res);
 

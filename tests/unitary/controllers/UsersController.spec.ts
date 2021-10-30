@@ -1,4 +1,4 @@
-import { mockRequestParams } from '@tests/utils';
+import { mockRequestParams, mockConsts } from '@tests/utils';
 
 import { UsersController } from '~/controllers';
 import { CreateUserService, GetUserDataService } from '~/services';
@@ -18,11 +18,7 @@ describe('Class UsersController', () => {
     it('calls CreateUserService', async () => {
       const service = CreateUserService.prototype.execute;
 
-      req.body.user = {
-        name: 'User Name',
-        email: 'user@email.com',
-        password: 'userpassword',
-      };
+      req.body = mockConsts.createUserBody();
 
       await controller.create(req, res);
 
@@ -34,9 +30,7 @@ describe('Class UsersController', () => {
     it('calls GetUserDataService', async () => {
       const service = GetUserDataService.prototype.execute;
 
-      res.locals.session = {
-        userId: 'userid',
-      };
+      res.locals.session = mockConsts.localSession();
 
       await controller.getData(req, res);
 

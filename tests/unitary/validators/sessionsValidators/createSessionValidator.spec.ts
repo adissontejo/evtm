@@ -1,4 +1,4 @@
-import { mockRequestParams } from '@tests/utils';
+import { mockRequestParams, mockConsts } from '@tests/utils';
 
 import { sessionsValidator } from '~/validators';
 
@@ -8,10 +8,7 @@ describe('UserValidator create', () => {
   beforeEach(() => {
     reset();
 
-    req.body.user = {
-      email: 'user@email.com',
-      password: 'userpassword',
-    };
+    req.body = mockConsts.createSessionBody();
   });
 
   describe('when params are missing', () => {
@@ -38,7 +35,7 @@ describe('UserValidator create', () => {
 
   describe('when password is too short', () => {
     it('returns error status', () => {
-      req.body.user.password = 'short';
+      req.body.user.password = 'shortp';
 
       sessionsValidator.create(req, res, next);
 

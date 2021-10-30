@@ -1,46 +1,25 @@
-import { getCustomRepository } from 'typeorm';
 import { mocked } from 'ts-jest/utils';
-import { hashSync } from 'bcryptjs';
+
+import { mockConsts, mockUsersRepository } from '@tests/utils';
 
 import { CreateSessionService } from '~/services';
 
-jest.mock('typeorm');
+let body = mockConsts.createSessionBody();
 
-const user = {
-  email: 'user@email.com',
-  password: 'userpassword',
-};
-
-const usersRepo = {
-  findOne: jest.fn(),
-};
+const usersRepo = mockUsersRepository();
 
 describe('Class CreateSessionService', () => {
-  beforeAll(() => {
-    mocked(getCustomRepository).mockReturnValue(usersRepo);
-  });
-
   beforeEach(() => {
-    user.email = 'user@email.com';
-    user.password = 'userpassword';
-
-    mocked(usersRepo).findOne.mockReturnValue({
-      id: 'userid',
-      name: 'User Name',
-      email: user.email,
-      password: hashSync('userpassword', 8),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+    body = mockConsts.createSessionBody();
   });
 
   describe('when user is not found', () => {
     it('returns error message', async () => {
-      mocked(usersRepo.findOne).mockReturnValue(undefined);
+      mocked(usersRepo.findOne).mockReturnValueOnce(undefined);
 
       const service = new CreateSessionService();
 
-      const result = await service.execute(user);
+      const result = await service.execute(body.user);
 
       expect(result).toHaveProperty('error');
     });
@@ -50,9 +29,9 @@ describe('Class CreateSessionService', () => {
     it('returns error message', async () => {
       const service = new CreateSessionService();
 
-      user.password = 'wrongpassword';
+      body.user.password = 'wrongpassword';
 
-      const result = await service.execute(user);
+      const result = await service.execute(body.user);
 
       expect(result).toHaveProperty('error');
     });
@@ -62,7 +41,7 @@ describe('Class CreateSessionService', () => {
     it('returns token', async () => {
       const service = new CreateSessionService();
 
-      const result = await service.execute(user);
+      const result = await service.execute(body.user);
 
       expect(result).toHaveProperty('token');
     });

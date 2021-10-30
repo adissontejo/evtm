@@ -6,15 +6,13 @@ import { auth } from '~/middlewares';
 
 const { req, res, next, reset } = mockRequestParams();
 
-const session = {
-  token: '',
-};
+let token = '';
 
 describe('Middleware auth', () => {
   beforeEach(() => {
     reset();
 
-    session.token = sign({ email: 'payloademail' }, 'privatekey', {
+    token = sign({ email: 'payloademail' }, 'privatekey', {
       subject: 'userid',
       expiresIn: '1d',
     });
@@ -40,7 +38,7 @@ describe('Middleware auth', () => {
 
   describe('when token is valid', () => {
     it('forwards requisition', () => {
-      req.headers.authorization = `Bearer ${session.token}`;
+      req.headers.authorization = `Bearer ${token}`;
 
       auth(req, res, next);
 

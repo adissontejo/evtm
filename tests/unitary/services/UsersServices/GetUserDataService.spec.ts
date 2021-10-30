@@ -1,39 +1,21 @@
-import { getCustomRepository } from 'typeorm';
 import { mocked } from 'ts-jest/utils';
+
+import { mockConsts, mockUsersRepository } from '@tests/utils';
 
 import { GetUserDataService } from '~/services';
 
-jest.mock('typeorm');
+let session = mockConsts.localSession();
 
-const session = {
-  userId: 'userid',
-};
-
-const usersRepo = {
-  findOne: jest.fn(),
-};
+const usersRepo = mockUsersRepository();
 
 describe('Class GetUserDataService', () => {
-  beforeAll(() => {
-    mocked(getCustomRepository).mockReturnValue(usersRepo);
-  });
-
   beforeEach(() => {
-    session.userId = 'userid';
-
-    mocked(usersRepo.findOne).mockReturnValue({
-      id: 'userid',
-      name: 'User Name',
-      email: 'user@email.com',
-      password: 'userhashedpassword',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+    session = mockConsts.localSession();
   });
 
   describe('when user is not found', () => {
     it('returns error message', async () => {
-      mocked(usersRepo.findOne).mockReturnValue(undefined);
+      mocked(usersRepo.findOne).mockReturnValueOnce(undefined);
 
       const service = new GetUserDataService();
 

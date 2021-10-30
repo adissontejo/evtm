@@ -1,12 +1,8 @@
-import { api, db } from '@tests/utils';
+import { api, db, mockConsts } from '@tests/utils';
 
 jest.unmock('typeorm');
 
-const user = {
-  name: 'User Name',
-  email: 'user@email.com',
-  password: 'userpassword',
-};
+let body = mockConsts.createUserBody();
 
 describe('POST /users', () => {
   beforeAll(async () => {
@@ -14,9 +10,7 @@ describe('POST /users', () => {
   });
 
   beforeEach(() => {
-    user.name = 'User Name';
-    user.email = 'user@email.com';
-    user.password = 'userpassword';
+    body = mockConsts.createUserBody();
   });
 
   afterAll(async () => {
@@ -25,9 +19,9 @@ describe('POST /users', () => {
 
   describe('when params are missing', () => {
     it('returns 400', async () => {
-      delete user.password;
+      delete body.user.password;
 
-      const result = await api.post('/users').send({ user });
+      const result = await api.post('/users').send(body);
 
       expect(result.statusCode).toBe(400);
     });
@@ -35,9 +29,9 @@ describe('POST /users', () => {
 
   describe('when email is invalid', () => {
     it('returns 400', async () => {
-      user.email = 'invalidemail@';
+      body.user.email = 'invalidemail@';
 
-      const result = await api.post('/users').send({ user });
+      const result = await api.post('/users').send(body);
 
       expect(result.statusCode).toBe(400);
     });
@@ -45,9 +39,9 @@ describe('POST /users', () => {
 
   describe('when password is too short', () => {
     it('returns 400', async () => {
-      user.password = 'shortp';
+      body.user.password = 'shortp';
 
-      const result = await api.post('/users').send({ user });
+      const result = await api.post('/users').send(body);
 
       expect(result.statusCode).toBe(400);
     });
@@ -55,7 +49,7 @@ describe('POST /users', () => {
 
   describe('when params are valid', () => {
     it('returns 201', async () => {
-      const result = await api.post('/users').send({ user });
+      const result = await api.post('/users').send(body);
 
       expect(result.statusCode).toBe(201);
     });
@@ -63,7 +57,7 @@ describe('POST /users', () => {
 
   describe('when email has already been used', () => {
     it('returns 409', async () => {
-      const result = await api.post('/users').send({ user });
+      const result = await api.post('/users').send(body);
 
       expect(result.statusCode).toBe(409);
     });

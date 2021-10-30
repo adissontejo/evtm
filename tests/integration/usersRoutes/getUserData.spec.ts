@@ -1,24 +1,16 @@
-import { api, db } from '@tests/utils';
+import { api, db, mockConsts } from '@tests/utils';
 
 jest.unmock('typeorm');
 
-const session = {
-  token: '',
-};
+let token = '';
 
 describe('GET /users', () => {
   beforeAll(async () => {
     await db.init();
 
-    const result = await api.post('/users').send({
-      user: {
-        name: 'User Name',
-        email: 'user@email.com',
-        password: 'userpassword',
-      },
-    });
+    const result = await api.post('/users').send(mockConsts.createUserBody());
 
-    session.token = `Bearer ${result.body.token}`;
+    token = `Bearer ${result.body.token}`;
   });
 
   afterAll(async () => {
@@ -45,9 +37,7 @@ describe('GET /users', () => {
 
   describe('when token is valid', () => {
     it('returns 200', async () => {
-      const result = await api
-        .get('/users')
-        .set('Authorization', session.token);
+      const result = await api.get('/users').set('Authorization', token);
 
       expect(result.statusCode).toBe(200);
     });

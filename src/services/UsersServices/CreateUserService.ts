@@ -1,4 +1,4 @@
-import { hash } from 'bcryptjs';
+import { hashSync } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import BaseService from '../BaseService';
@@ -22,7 +22,7 @@ class CreateUserService extends BaseService {
       };
     }
 
-    const encryptedPassword = await hash(userData.password, 8);
+    const encryptedPassword = hashSync(userData.password, 8);
 
     const user = await this.usersRepository.save({
       ...userData,
