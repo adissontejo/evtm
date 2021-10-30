@@ -15,6 +15,15 @@ const mockConsts = {
     return { user };
   },
 
+  deleteUserBody: () => {
+    const user = { ...userDefaults };
+
+    delete user.name;
+    delete user.email;
+
+    return { user };
+  },
+
   localSession: () => ({ userId: 'userid' }),
 };
 

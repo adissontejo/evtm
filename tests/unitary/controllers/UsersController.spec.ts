@@ -1,7 +1,11 @@
 import { mockRequestParams, mockConsts } from '@tests/utils';
 
 import { UsersController } from '~/controllers';
-import { CreateUserService, GetUserDataService } from '~/services';
+import {
+  CreateUserService,
+  DeleteUserService,
+  GetUserDataService,
+} from '~/services';
 
 jest.mock('~/services');
 
@@ -23,6 +27,20 @@ describe('Class UsersController', () => {
       await controller.create(req, res);
 
       expect(service).toBeCalledWith(req.body.user);
+    });
+  });
+
+  describe('method delete', () => {
+    it('calls DeleteUserService', async () => {
+      const service = DeleteUserService.prototype.execute;
+
+      req.body = mockConsts.deleteUserBody();
+
+      res.locals.session = mockConsts.localSession();
+
+      await controller.delete(req, res);
+
+      expect(service).toBeCalledWith(req.body.user, res.locals.session);
     });
   });
 
