@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 
-import { CreateUserService, GetUserDataService } from '~/services';
+import {
+  CreateUserService,
+  DeleteUserService,
+  GetUserDataService,
+} from '~/services';
 
 class UsersController {
   async create(req: Request, res: Response) {
@@ -11,6 +15,18 @@ class UsersController {
     const result = await service.execute(user);
 
     return res.status(201).json(result);
+  }
+
+  async delete(req: Request, res: Response) {
+    const { user } = req.body;
+
+    const { session } = res.locals;
+
+    const service = new DeleteUserService();
+
+    const result = await service.execute(user, session);
+
+    return res.status(200).json(result);
   }
 
   async getData(req: Request, res: Response) {
